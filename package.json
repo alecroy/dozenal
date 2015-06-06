@@ -1,0 +1,23 @@
+{
+  "name": "dozenal",
+  "version": "0.0.1",
+  "description": "A module for converting base-10 number strings to base-12.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0"
+  },
+  "scripts": {
+    "build": "coffee -pc README.litcoffee >index.js",
+    "test": "mocha --compilers coffee:coffee-script/register"
+  },
+  "keywords": [
+    "dozenal",
+    "duodecimal",
+    "base12"
+  ],
+  "author": "Alec Hollingsworth <alec@mailc.net> (http://alecroy.me)",
+  "license": "AGPL-3.0"
+}
