@@ -1,7 +1,7 @@
 {
   "name": "dozenal",
-  "version": "0.0.1",
-  "description": "A module for converting base-10 number strings to base-12.",
+  "version": "0.1.0",
+  "description": "A module for converting base-10 numbers to base-12 strings.",
   "main": "index.js",
   "devDependencies": {
     "chai": "^3.0.0"
