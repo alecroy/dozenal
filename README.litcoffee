@@ -249,6 +249,7 @@ dozenal exports 2 functions
     ✓ print 12 is "10"
     ✓ print -12 is "-10"
     ✓ print 24.0625 is "20.09"
+    ✓ print 25.5 is "21.6"
     ✓ print 250561 is "101001"
   .print(number, "d") returns a lowercase equivalent
     ✓ print 10, 'd' is "t"
@@ -268,6 +269,7 @@ dozenal exports 2 functions
     ✓ 12 is "doh"
     ✓ 144 is "gro"
     ✓ 157 is "gro doh one"
+    ✓ 25.5 is "two-doh one point six"
     ✓ 250,561 is "gro one mo one"
   .say(..) can pronounce fractions
     ✓ pi to 4 dozenal places is "three point one eight four eight"
@@ -290,7 +292,7 @@ dozenal exports 2 functions
     ✓ the low digits of MAX_SAFE_INTEGER are "dec-gro two-doh seven"
 
 
-39 passing (41ms)
+41 passing (41ms)
 ~~~
 
 ---

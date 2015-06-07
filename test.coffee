@@ -13,6 +13,7 @@ describe 'dozenal exports 2 functions', ->
     it 'print 12 is "10"', -> expect(print 12).to.equal '10'
     it 'print -12 is "-10"', -> expect(print -12).to.equal '-10'
     it 'print 24.0625 is "20.09"', -> expect(print 24.0625).to.equal '20.09'
+    it 'print 25.5 is "21.6"', -> expect(print 25.5).to.equal '21.6'
     it 'print 250561 is "101001"', -> expect(print 250561).to.equal '101001'
   describe '.print(number, "d") returns a lowercase equivalent', ->
     it 'print 10, \'d\' is "t"', -> expect(print 10, 'd').to.equal 't'
@@ -36,6 +37,8 @@ describe 'dozenal exports 2 functions', ->
     it '12 is "doh"', -> expect(say 12).to.equal "doh"
     it '144 is "gro"', -> expect(say 144).to.equal "gro"
     it '157 is "gro doh one"', -> expect(say 157).to.equal "gro doh one"
+    it '25.5 is "two-doh one point six"', ->
+      expect(say 25.5).to.equal "two-doh one point six"
     it '250,561 is "gro one mo one"', ->
       expect(say 250561).to.equal "gro one mo one"
   describe '.say(..) can pronounce fractions', ->
