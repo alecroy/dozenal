@@ -15,6 +15,10 @@
     "duodecimal",
     "base12"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alecroy/dozenal.git"
+  },
   "author": "Alec Hollingsworth <alec@mailc.net> (http://alecroy.me)",
   "license": "AGPL-3.0"
 }
