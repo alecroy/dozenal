@@ -14,7 +14,9 @@
       upperLower ||= 'd'
       table = digitsTable[upperLower]
 
-      while integral > 1 and iWidth > 0
+      if integral == 0
+        digits.unshift '0'
+      while integral >= 1 and iWidth > 0
         iWidth--
         lsb = integral % 12
         digits.unshift table[lsb]

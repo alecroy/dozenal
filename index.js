@@ -18,7 +18,10 @@
     fWidth = Number(fWidth) || Number.MAX_SAFE_INTEGER;
     upperLower || (upperLower = 'd');
     table = digitsTable[upperLower];
-    while (integral > 1 && iWidth > 0) {
+    if (integral === 0) {
+      digits.unshift('0');
+    }
+    while (integral >= 1 && iWidth > 0) {
       iWidth--;
       lsb = integral % 12;
       digits.unshift(table[lsb]);
