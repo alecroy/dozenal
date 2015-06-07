@@ -34,7 +34,7 @@ This is a module for printing numbers in Base 12.  An optional format string can
         fWidth = Number fWidth
         fFixed = true
 
-      table = digitTable[upperLower || 'D']
+      table = numerals[upperLower || 'D']
 
       if integral == 0
         digits.unshift '0'
@@ -63,7 +63,7 @@ This is a module for printing numbers in Base 12.  An optional format string can
       else
         "#{sign}#{digits.join ''}.#{fractions.join ''}"
 
-    digitTable =
+    numerals =
       'D': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E', ],
       'd': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'e', ],
 
@@ -82,53 +82,92 @@ This is a module for printing numbers in Base 12.  An optional format string can
       'E': 'el',
       'e': 'el',
 
-
     powers =
+      0: '',
       1: 'doh',
       2: 'gro',
       3: 'mo',
+      4: 'doh',
+      5: 'gro',
       6: 'millo',
+      7: 'doh',
+      8: 'gro',
       9: 'bo',
+      10: 'doh',
+      11: 'gro',
       12: 'tro',
+      13: 'doh',
+      14: 'gro',
       15: 'quadro',
+      16: 'doh',
+      17: 'gro',
       18: 'quinto',
+      19: 'doh',
+      20: 'gro',
       21: 'sexto',
+      22: 'doh',
+      23: 'gro',
       24: 'septo',
+      25: 'doh',
+      26: 'gro',
       27: 'octo',
 
     exports.say = (number, format='') ->
       dozenal = exports.print number, format
+      [digits, fractions] = dozenal.split '.'
+      digits = if digits then digits.split('').reverse() else []
+      fractions = if fractions then fractions.split('') else []
 
-      [int, fractional] = dozenal.split '.'
+      output = sayDigits digits
+      output = sayFractions fractions, output
+      output.join ' '
 
-      segments = []
+    sayDigits = (digits, output=[]) ->
+      switch digits.length
+        when 0
+          output.push 'zero'
+          output
+        when 1
+          if digits[0] is '0' then output.push 'zero'
+          else output.push words[digits[0]]
+          output
+        else
+          sayDigitsReversed digits, 0, output
+          .filter (str) -> str isnt ''
+          .reverse()
 
-      # Fractional part first
-      if fractional and fractional isnt ''
-        fractional = fractional.split('').reverse().join('')
-        while fractional.length > 0
-          segments.unshift words[fractional.substr(0, 1)]
-          fractional = fractional.substr 1
+    sayFractions = (fractions, output=[]) ->
+      if fractions?.length > 0
+        output.push 'point'
+        while fractions.length > 0
+          output.push words[fractions.shift()]
+      output
 
-        segments.unshift 'point'
+    sayDigitsReversed = (digits, power=0, output=[]) ->
+      if digits.length is 0
+        return output
 
-      # Integral part
-      if int is '0' or int is ''
-        segments.unshift 'zero'
-      else
-        int = int.split('').reverse().join('')
-        power = 0
-        while int.length > 0
-          [triple, int] = [int.substr(0, 3), int.substr(3)]
-          if power > 0
-            segments.unshift powers[power]
-          switch triple.length
-            when 1
-              segments.unshift "#{words[triple[0]]}"
-            when 2
-              segments.unshift "#{words[triple[1]]}-doh #{words[triple[0]]}"
-            when 3
-              segments.unshift "#{words[triple[2]]}-gro #{words[triple[1]]}-doh #{words[triple[0]]}"
-          power += 3
+      group = digits.splice(0, 3)
+      if group.every((d) -> d == '0')
+        return sayDigitsReversed digits, power + 3, output
 
-      segments.join ' '
+      output.push powers[power]
+
+      output.push switch group[0]
+        when undefined then ''
+        when '0' then ''
+        else
+          if group[0] is '1' and power > 0 then ''
+          else words[group[0]]
+      output.push switch group[1]
+        when undefined then ''
+        when '0' then ''
+        when '1' then "#{powers[power + 1]}"
+        else "#{words[group[1]]}-#{powers[power + 1]}"
+      output.push switch group[2]
+        when undefined then ''
+        when '0' then ''
+        when '1' then "#{powers[power + 2]}"
+        else "#{words[group[2]]}-#{powers[power + 2]}"
+
+      sayDigitsReversed digits, power + 3, output
