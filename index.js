@@ -57,17 +57,20 @@
   };
 
   exports.say = function(number, format) {
-    var digits, dozenal, fractions, output, ref;
+    var digits, dozenal, fractions, minus, output, ref;
     if (format == null) {
       format = '';
     }
+    output = [];
+    minus = Math.sign(number) === -1 ? 'minus ' : '';
+    number = Math.abs(number);
     dozenal = exports.print(number, format);
     ref = dozenal.split('.'), digits = ref[0], fractions = ref[1];
     digits = digits ? digits.split('').reverse() : [];
     fractions = fractions ? fractions.split('') : [];
-    output = sayDigits(digits);
+    output = sayDigits(digits, output);
     output = sayFractions(fractions, output);
-    return output.join(' ');
+    return "" + minus + (output.join(' '));
   };
 
   sayDigits = function(digits, output) {

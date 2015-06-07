@@ -2,7 +2,7 @@
 
 This is a module to `print` numbers in Base 12.  An optional format string can be passed in to specify output width and/or case.
 
-To be extra silly, you can also `say` the numbers, which pronounces them with words.  I went ahead and made up the names for very large powers, so be aware "bo" does not line up with "a billion" and so forth.
+To be extra silly, you can also `say` the numbers, which pronounces them with words.  I went ahead and made up the names for very large powers, so be aware "bo" does not line up with "a billion" and so forth.  Test output is included at the bottom.
 
 | Input | Output | Pronunciation |
 |-------|--------|---------------|
@@ -67,14 +67,18 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
         "#{sign}#{digits.join ''}.#{fractions.join ''}"
 
     exports.say = (number, format='') ->
+      output = []
+      minus = if Math.sign(number) is -1 then 'minus ' else ''
+      number = Math.abs number
+
       dozenal = exports.print number, format
       [digits, fractions] = dozenal.split '.'
       digits = if digits then digits.split('').reverse() else []
       fractions = if fractions then fractions.split('') else []
 
-      output = sayDigits digits
+      output = sayDigits digits, output
       output = sayFractions fractions, output
-      output.join ' '
+      "#{minus}#{output.join ' '}"
 
     sayDigits = (digits, output=[]) ->
       switch digits.length
@@ -174,3 +178,57 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
       25: 'doh',
       26: 'gro',
       27: 'nondo',
+
+## Test Output
+
+`npm run test`
+
+~~~bash
+dozenal exports 2 functions
+  .print(number) returns a string in base-12
+    ✓ print 0 is "0"
+    ✓ print 10 is "T"
+    ✓ print 11 is "E"
+    ✓ print 12 is "10"
+    ✓ print -12 is "-10"
+    ✓ print 24.0625 is "20.09"
+  .print(number, "d") returns a lowercase equivalent
+    ✓ print 10, 'd' is "t"
+    ✓ print 11, 'e' is "e"
+  .print(number, "5d") prints exactly 5 digits
+    ✓ print 10, '5d' is "    t"
+    ✓ print 1000000, '5d' is "02854"
+  .print(number, "1.5") prints 1 digit and 5 dozenal places
+    ✓ print pi, '1.5' is "3.18480"
+  .say(number) returns a string of pronouncable words
+    ✓ 0 is "zero"
+    ✓ 10 is "dec"
+    ✓ -10 is "minus dec"
+    ✓ 11 is "el"
+    ✓ 12 is "doh"
+    ✓ 144 is "gro"
+    ✓ 157 is "gro doh one"
+  .say(..) can pronounce fractions
+    ✓ pi to 4 dozenal places is "three point one eight four eight"
+  .say(..) works up to nondo (12^27)
+    ✓ 12^0 is "one"
+    ✓ 12^1 is "doh"
+    ✓ 12^2 is "gro"
+    ✓ 12^3 is "mo"
+    ✓ 12^6 is "bo"
+    ✓ 12^9 is "tro"
+    ✓ 12^12 is "quadro"
+    ✓ 12^15 is "quinto"
+    ✓ 12^18 is "sexto"
+    ✓ 12^21 is "septo"
+    ✓ 12^24 is "octo"
+    ✓ 12^27 is "nondo"
+    ✓ -12^27 is "minus nondo"
+    ✓ the low digits of MAX_SAFE_INTEGER are "dec-gro two-doh seven"
+
+33 passing (42ms)
+~~~
+
+---
+
+*This file is written in Literate CoffeeScript: all source code is shown above.  The module `index.js` is generated from this file.*

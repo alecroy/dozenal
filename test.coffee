@@ -11,6 +11,7 @@ describe 'dozenal exports 2 functions', ->
     it 'print 10 is "T"', -> expect(print 10).to.equal 'T'
     it 'print 11 is "E"', -> expect(print 11).to.equal 'E'
     it 'print 12 is "10"', -> expect(print 12).to.equal '10'
+    it 'print -12 is "-10"', -> expect(print -12).to.equal '-10'
     it 'print 24.0625 is "20.09"', -> expect(print 24.0625).to.equal '20.09'
   describe '.print(number, "d") returns a lowercase equivalent', ->
     it 'print 10, \'d\' is "t"', -> expect(print 10, 'd').to.equal 't'
@@ -25,6 +26,7 @@ describe 'dozenal exports 2 functions', ->
   describe '.say(number) returns a string of pronouncable words', ->
     it '0 is "zero"', -> expect(say 0).to.equal "zero"
     it '10 is "dec"', -> expect(say 10).to.equal "dec"
+    it '-10 is "minus dec"', -> expect(say(-10)).to.equal "minus dec"
     it '11 is "el"', -> expect(say 11).to.equal "el"
     it '12 is "doh"', -> expect(say 12).to.equal "doh"
     it '144 is "gro"', -> expect(say 144).to.equal "gro"
@@ -45,5 +47,7 @@ describe 'dozenal exports 2 functions', ->
     it '12^21 is "septo"', -> expect(say 12**21).to.equal "sepdo"
     it '12^24 is "octo"', -> expect(say 12**24).to.equal "ocdo"
     it '12^27 is "nondo"', -> expect(say 12**27).to.equal "nondo"
+    it '-12^27 is "minus nondo"', ->
+      expect(say (-(12**27))).to.equal "minus nondo"
     it 'the low digits of MAX_SAFE_INTEGER are "dec-gro two-doh seven"', ->
       expect(say Number.MAX_SAFE_INTEGER, '3').to.equal 'dec-gro two-doh seven'
