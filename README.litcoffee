@@ -1,19 +1,22 @@
 # *dozenal*
 
-This is a module for printing numbers in Base 12.  An optional format string can be passed in to specify output width and/or case.
+This is a module to `print` numbers in Base 12.  An optional format string can be passed in to specify output width and/or case.
+
+To be extra silly, you can also `say` the numbers, which pronounces them with words.  I went ahead and made up the names for very large powers, so be aware "bo" does not line up with "a billion" and so forth.
 
 | Input | Output | Pronunciation |
 |-------|--------|---------------|
-|`dozenal 7`|`'7'`| seven |
-|`dozenal -7`|`'-7'`| minus seven |
-|`dozenal 10`|`'T'`| dek |
-|`dozenal 10, '4'`|`'___T'`| dek (with 3 spaces) |
-|`dozenal 11`|`'E'`| el |
-|`dozenal 12`|`'10'`| doe |
-|`dozenal 24`|`'20'`| two-doe |
-|`dozenal 144`|`'100'`| grow |
-|`dozenal 25.5`|`'21.6'`| two-doe one point six |
-|`dozenal 3.14159265, '.3'`|`'3.184'`| three point one eight four |
+|`7`|`'7'`| 'seven' |
+|`-7`|`'-7'`| 'minus seven' |
+|`10`|`'T'`| 'dec' |
+|`10, 'd'`|`'t'`| 'dec' |
+|`10, '4d'`|`'___t'`| 'dec' |
+|`11`|`'E'`| 'el' |
+|`12`|`'10'`| 'doh' |
+|`24`|`'20'`| 'two-doh' |
+|`144`|`'100'`| 'gro' |
+|`25.5`|`'21.6'`| 'two-doh one point six' |
+|`3.14159265, '.3'`|`'3.184'`| 'three point one eight four' |
 
     exports.print = (number, format='') ->
       digits = []
@@ -62,55 +65,6 @@ This is a module for printing numbers in Base 12.  An optional format string can
         "#{sign}#{digits.join('')}"
       else
         "#{sign}#{digits.join ''}.#{fractions.join ''}"
-
-    numerals =
-      'D': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E', ],
-      'd': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'e', ],
-
-    words =
-      '1': 'one',
-      '2': 'two',
-      '3': 'three',
-      '4': 'four',
-      '5': 'five',
-      '6': 'six',
-      '7': 'seven',
-      '8': 'eight',
-      '9': 'nine',
-      'T': 'dec',
-      't': 'dec',
-      'E': 'el',
-      'e': 'el',
-
-    powers =
-      0: '',
-      1: 'doh',
-      2: 'gro',
-      3: 'mo',
-      4: 'doh',
-      5: 'gro',
-      6: 'bo',
-      7: 'doh',
-      8: 'gro',
-      9: 'tro',
-      10: 'doh',
-      11: 'gro',
-      12: 'quadro',
-      13: 'doh',
-      14: 'gro',
-      15: 'quindo',
-      16: 'doh',
-      17: 'gro',
-      18: 'sexdo',
-      19: 'doh',
-      20: 'gro',
-      21: 'sepdo',
-      22: 'doh',
-      23: 'gro',
-      24: 'ocdo',
-      25: 'doh',
-      26: 'gro',
-      27: 'nondo',
 
     exports.say = (number, format='') ->
       dozenal = exports.print number, format
@@ -171,3 +125,52 @@ This is a module for printing numbers in Base 12.  An optional format string can
         else "#{words[group[2]]}-#{powers[power + 2]}"
 
       sayDigitsReversed digits, power + 3, output
+
+    numerals =
+      'D': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E', ],
+      'd': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'e', ],
+
+    words =
+      '1': 'one',
+      '2': 'two',
+      '3': 'three',
+      '4': 'four',
+      '5': 'five',
+      '6': 'six',
+      '7': 'seven',
+      '8': 'eight',
+      '9': 'nine',
+      'T': 'dec',
+      't': 'dec',
+      'E': 'el',
+      'e': 'el',
+
+    powers =
+      0: '',
+      1: 'doh',
+      2: 'gro',
+      3: 'mo',
+      4: 'doh',
+      5: 'gro',
+      6: 'bo',
+      7: 'doh',
+      8: 'gro',
+      9: 'tro',
+      10: 'doh',
+      11: 'gro',
+      12: 'quadro',
+      13: 'doh',
+      14: 'gro',
+      15: 'quindo',
+      16: 'doh',
+      17: 'gro',
+      18: 'sexdo',
+      19: 'doh',
+      20: 'gro',
+      21: 'sepdo',
+      22: 'doh',
+      23: 'gro',
+      24: 'ocdo',
+      25: 'doh',
+      26: 'gro',
+      27: 'nondo',
