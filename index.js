@@ -144,6 +144,19 @@
     }
   };
 
+  sayFractions = function(fractions, output) {
+    if (output == null) {
+      output = [];
+    }
+    if ((fractions != null ? fractions.length : void 0) > 0) {
+      output.push('point');
+      while (fractions.length > 0) {
+        output.push(words[fractions.shift()]);
+      }
+    }
+    return output;
+  };
+
   sayDigitsReversed = function(digits, power, output) {
     var group;
     if (power == null) {
@@ -201,19 +214,6 @@
       }
     })());
     return sayDigitsReversed(digits, power + 3, output);
-  };
-
-  sayFractions = function(fractions, output) {
-    if (output == null) {
-      output = [];
-    }
-    if ((fractions != null ? fractions.length : void 0) > 0) {
-      output.push('point');
-      while (fractions.length > 0) {
-        output.push(words[fractions.shift()]);
-      }
-    }
-    return output;
   };
 
 }).call(this);
