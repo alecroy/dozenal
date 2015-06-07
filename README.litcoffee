@@ -21,27 +21,20 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
     exports.print = (number, format='') ->
       sign = if -1 is Math.sign number then '-' else ''
       number = Math.abs number
-
-      integral = Math.floor number
-      fractional = number - integral
+      integer = Math.floor number
+      fraction = number - integer
 
       [format, iWidth, upperLower, fWidth] = /(\d?)([dD]?).?(\d?)/.exec format
-      [iFixed, fFixed] = [false, false]
-      if iWidth isnt ''
-        iWidth = Number iWidth
-        iFixed = true
-      if fWidth isnt ''
-        fWidth = Number fWidth
-        fFixed = true
+      [iFixed, fFixed] = [iWidth isnt '', fWidth isnt '']
+      iWidth = Number(iWidth || 0)
+      fWidth = Number(fWidth || 0)
 
       table = numerals[upperLower || 'D']
-      digits = integerToDigits integral, table, iFixed, iWidth
-      fractions = fractionToDigits fractional, table, fFixed, fWidth
+      digits = integerToDigits integer, table, iFixed, iWidth
+      fractions = fractionToDigits fraction, table, fFixed, fWidth
 
-      if fractions.length is 0
-        "#{sign}#{digits.join('')}"
-      else
-        "#{sign}#{digits.join ''}.#{fractions.join ''}"
+      if fractions.length is 0 then "#{sign}#{digits.join ''}"
+      else "#{sign}#{digits.join ''}.#{fractions.join ''}"
 
     integerToDigits = (integer, numerals, fixed, width) ->
       output = []

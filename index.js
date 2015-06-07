@@ -3,27 +3,21 @@
   var fractionToDigits, integerToDigits, numerals, powers, sayDigits, sayDigitsReversed, sayFractions, words;
 
   exports.print = function(number, format) {
-    var digits, fFixed, fWidth, fractional, fractions, iFixed, iWidth, integral, ref, ref1, sign, table, upperLower;
+    var digits, fFixed, fWidth, fraction, fractions, iFixed, iWidth, integer, ref, ref1, sign, table, upperLower;
     if (format == null) {
       format = '';
     }
     sign = -1 === Math.sign(number) ? '-' : '';
     number = Math.abs(number);
-    integral = Math.floor(number);
-    fractional = number - integral;
+    integer = Math.floor(number);
+    fraction = number - integer;
     ref = /(\d?)([dD]?).?(\d?)/.exec(format), format = ref[0], iWidth = ref[1], upperLower = ref[2], fWidth = ref[3];
-    ref1 = [false, false], iFixed = ref1[0], fFixed = ref1[1];
-    if (iWidth !== '') {
-      iWidth = Number(iWidth);
-      iFixed = true;
-    }
-    if (fWidth !== '') {
-      fWidth = Number(fWidth);
-      fFixed = true;
-    }
+    ref1 = [iWidth !== '', fWidth !== ''], iFixed = ref1[0], fFixed = ref1[1];
+    iWidth = Number(iWidth || 0);
+    fWidth = Number(fWidth || 0);
     table = numerals[upperLower || 'D'];
-    digits = integerToDigits(integral, table, iFixed, iWidth);
-    fractions = fractionToDigits(fractional, table, fFixed, fWidth);
+    digits = integerToDigits(integer, table, iFixed, iWidth);
+    fractions = fractionToDigits(fraction, table, fFixed, fWidth);
     if (fractions.length === 0) {
       return "" + sign + (digits.join(''));
     } else {
