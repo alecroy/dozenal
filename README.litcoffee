@@ -19,9 +19,6 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
 |`3.14159265, '.3'`|`'3.184'`| 'three point one eight four' |
 
     exports.print = (number, format='') ->
-      digits = []
-      fractions = []
-      
       sign = if -1 is Math.sign number then '-' else ''
       number = Math.abs number
 
@@ -38,33 +35,41 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
         fFixed = true
 
       table = numerals[upperLower || 'D']
-
-      if integral == 0
-        digits.unshift '0'
-      while integral >= 1 and (!iFixed or iWidth > 0)
-        iWidth--
-        lsb = integral % 12
-        digits.unshift table[lsb]
-        integral -= lsb
-        integral /= 12
-      while iFixed and iWidth > 0
-        digits.unshift ' '
-        iWidth--
-
-      while fractional > 0 and (!fFixed or fWidth > 0)
-        fWidth--
-        fractional *= 12
-        msb = Math.floor fractional
-        fractions.push table[msb]
-        fractional -= msb
-      while fFixed and fWidth > 0
-        fractions.push ' '
-        fWidth--
+      digits = integerToDigits integral, table, iFixed, iWidth
+      fractions = fractionToDigits fractional, table, fFixed, fWidth
 
       if fractions.length is 0
         "#{sign}#{digits.join('')}"
       else
         "#{sign}#{digits.join ''}.#{fractions.join ''}"
+
+    integerToDigits = (integer, numerals, fixed, width) ->
+      output = []
+      if integer == 0
+        output.unshift '0'
+      while integer >= 1 and (!fixed or width > 0)
+        width--
+        lsb = integer % 12
+        output.unshift numerals[lsb]
+        integer -= lsb
+        integer /= 12
+      while fixed and width > 0
+        output.unshift ' '
+        width--
+      output
+
+    fractionToDigits = (fraction, numerals, fixed, width) ->
+      output = []
+      while fraction > 0 and (!fixed or width > 0)
+        width--
+        fraction *= 12
+        msb = Math.floor fraction
+        output.push numerals[msb]
+        fraction -= msb
+      while fixed and width > 0
+        output.push ' '
+        width--
+      output
 
     exports.say = (number, format='') ->
       output = []
