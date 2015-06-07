@@ -28,7 +28,7 @@ dozenal.say 300
 
 ## The Module
 
-This module exports two functions: `.print(..)` and `.say(..)`.
+This module exports two functions: `.print(..)` and `.say(..)`.  Both take normal Numbers and both return Strings.  They both take an optional format string `X.Y` that can limit the width of the integer part (`X` wide) and the fractional part (`Y` wide).  An optional `d` in `Xd.Y` will output dec and el as `t` and `e` instead of the default `T` and `E`.
 
 #### Print it
 
@@ -38,32 +38,49 @@ This module exports two functions: `.print(..)` and `.say(..)`.
       integer = Math.floor number
       fraction = number - integer
 
+First the input is separated into a minus sign (`'-'`/`''`), a positive integer, and a positive fraction.
+
       [format, iWidth, upperLower, fWidth] = /(\d?)([dD]?).?(\d?)/.exec format
       [iFixed, fFixed] = [iWidth isnt '', fWidth isnt '']
       iWidth = Number(iWidth || 0)
       fWidth = Number(fWidth || 0)
 
+A regular expression captures the 3 parts of the format string: the integer width, the upper/lower case, and the fractional width.  If these are not passed in, the entire number should be shown (but no more).  The `_Fixed` flags indicate whether the `_Width` fields mean anything, as their default value 0 could be a real width passed in as `0` or `0.0`, etc.  
+
       table = numerals[upperLower || 'D']
       digits = integerToDigits integer, table, iFixed, iWidth
       fractions = fractionToDigits fraction, table, fFixed, fWidth
 
+A table lookup finds the correct set of numerals (`..8 9 t e` vs `..8 9 T E`).  The digits & fractional digits are both converted to an array of numerals.
+
       if fractions.length is 0 then "#{sign}#{digits.join ''}"
       else "#{sign}#{digits.join ''}.#{fractions.join ''}"
 
+If the input was an integer, the dozenal point fractional part are omitted.  In either case, the sign and digits are output.  There are just 2 helper functions, `integerToDigits` and `fractionToDigits`.
+
     integerToDigits = (integer, numerals, fixed, width) ->
       output = []
-      if integer == 0
+      if integer == 0 and (!fixed or width > 0)
+        width--
         output.unshift '0'
+
+Zero is a special case since it technically is the only *leading* zero that is output.  It is only output if the width allows for it (format of `'0.'` omits it).
+
       while integer >= 1 and (!fixed or width > 0)
         width--
         lsb = integer % 12
         output.unshift numerals[lsb]
         integer -= lsb
         integer /= 12
+
+The least significant digits are prepended to the output first.  The integer is shifted right every step (in base 12).  This continues until the integer is 0 or the fixed width is reached.
+
       while fixed and width > 0
         output.unshift ' '
         width--
       output
+
+If the output is fixed and the width has not yet been reached, spaces are prepended to the output.
 
     fractionToDigits = (fraction, numerals, fixed, width) ->
       output = []
@@ -73,10 +90,15 @@ This module exports two functions: `.print(..)` and `.say(..)`.
         msb = Math.floor fraction
         output.push numerals[msb]
         fraction -= msb
+
+The most significant digits are appended to the output first.  The fraction is shifted left every step (in base 12).  Each digit is obtained not through modulus but by shifting a digit left of the dozenal point then truncating the digits right of the dozenal point.  This continues until the fractional part drops to 0 (no trailing zeroes are output).
+
       while fixed and width > 0
         output.push ' '
         width--
       output
+
+If the output is fixed and the width has not been reached, spaces are appended.
 
 #### Say it
 
@@ -90,23 +112,13 @@ This module exports two functions: `.print(..)` and `.say(..)`.
       digits = if digits then digits.split('').reverse() else []
       fractions = if fractions then fractions.split('') else []
 
+First, the number is printed into dozenal form to the specified width.  That printed form is separated into a minus sign, an array of integer digits, and an array of fractional digits.  The digits are reversed so that the least significant comes first.  This makes it easier to say the proper power without knowing how many digits come later.
+
       output = sayDigits digits, output
       output = sayFractions fractions, output
       "#{minus}#{output.join ' '}"
 
-    sayDigits = (digits, output=[]) ->
-      switch digits.length
-        when 0
-          output.push 'zero'
-          output
-        when 1
-          if digits[0] is '0' then output.push 'zero'
-          else output.push words[digits[0]]
-          output
-        else
-          sayDigitsReversed digits, 0, output
-          .filter (str) -> str isnt ''
-          .reverse()
+The arrays numerals are converted to arrays of words with helper functions `sayDigits` and `sayFractions`.  The minus sign is printed, then the words are joined with spaces.
 
     sayFractions = (fractions, output=[]) ->
       if fractions?.length > 0
@@ -114,6 +126,24 @@ This module exports two functions: `.print(..)` and `.say(..)`.
         while fractions.length > 0
           output.push words[fractions.shift()]
       output
+
+`sayFractions` is the simplest of the helper functions.  Fractional numerals are not said with powers, so the numerals are converted into words one by one.  The parameter `output` holds the entire number so far, so words are pushed onto it.
+
+    sayDigits = (digits, output=[]) ->
+      switch digits.length
+        when 1
+          if digits[0] is '0' then output.push 'zero'
+          else output.push words[digits[0]]
+          output
+
+When there is just a single numeral in the digits, it can be handled directly.  Zero is a special case as it is a leading zero, and otherwise just the numeral (without the power) is output.
+
+        else
+          sayDigitsReversed digits, 0, output
+          .filter (str) -> str isnt ''
+          .reverse()
+
+When there are at least 2 digits, another helper function `sayDigitsReversed` outputs the numerals in groups of 3 according to their power (like "one hundred one __million__, seventy two __thousand__").  This helper returns an array of strings, only some of which are not empty.  The empty strings are filtered out then the words are reversed to put the most significant digit back in front.
 
     sayDigitsReversed = (digits, power=0, output=[]) ->
       if digits.length is 0
@@ -123,14 +153,23 @@ This module exports two functions: `.print(..)` and `.say(..)`.
       if group.every((d) -> d == '0')
         return sayDigitsReversed digits, power + 3, output
 
+This function works recursively, pulling off the least significant digits (as it was reversed before passed as argument) in groups of 3.  If every digit in the group is zero, nothing is output.  The only special case where `zero` needed to be printed was done in `sayDigits`.  The recursion would then continue with the remaining digits on the next higher power (`power + 3`).
+
       output.push powers[power]
+
+If there is at least one nonzero digit in this group, the power is output.  Note that for the lowest group, the power is `''` so nothing is printed.  These empty strings are filtered out above in `sayDigits`.
+
+For each of the three digits in the group, either an empty string or a word is pushed onto the output.
 
       output.push switch group[0]
         when undefined then ''
         when '0' then ''
         else
-          if group[0] is '1' and power > 0 then ''
+          if group[0] is '1' and power > 0 and !group[1] and !group[2] then ''
           else words[group[0]]
+
+If the lowest digit is the leading digit (`group[1]` and `group[2]` are undefined), then the "one" is omitted and just the power is output (like a "million", not "one million").
+
       output.push switch group[1]
         when undefined then ''
         when '0' then ''
@@ -143,6 +182,8 @@ This module exports two functions: `.print(..)` and `.say(..)`.
         else "#{words[group[2]]}-#{powers[power + 2]}"
 
       sayDigitsReversed digits, power + 3, output
+
+The second and third digits in the group are output with their corresponding power, hyphenated to show they are part of the group.  Finally, the remainder of the digits are said through a recursive call.
 
 #### Constants: strings to express numerals and powers
 
@@ -208,6 +249,7 @@ dozenal exports 2 functions
     ✓ print 12 is "10"
     ✓ print -12 is "-10"
     ✓ print 24.0625 is "20.09"
+    ✓ print 250561 is "101001"
   .print(number, "d") returns a lowercase equivalent
     ✓ print 10, 'd' is "t"
     ✓ print 11, 'e' is "e"
@@ -216,6 +258,8 @@ dozenal exports 2 functions
     ✓ print 1000000, '5d' is "02854"
   .print(number, "1.5") prints 1 digit and 5 dozenal places
     ✓ print pi, '1.5' is "3.18480"
+    ✓ print 1.5, '1.5' is "1.6    "
+    ✓ print 0.25, '0.' is ".3"
   .say(number) returns a string of pronouncable words
     ✓ 0 is "zero"
     ✓ 10 is "dec"
@@ -224,8 +268,11 @@ dozenal exports 2 functions
     ✓ 12 is "doh"
     ✓ 144 is "gro"
     ✓ 157 is "gro doh one"
+    ✓ 250,561 is "gro one mo one"
   .say(..) can pronounce fractions
     ✓ pi to 4 dozenal places is "three point one eight four eight"
+    ✓ 0.25 is "zero point three"
+    ✓ 0.25, '0.' is "point three"
   .say(..) works up to nondo (12^27)
     ✓ 12^0 is "one"
     ✓ 12^1 is "doh"
@@ -242,7 +289,8 @@ dozenal exports 2 functions
     ✓ -12^27 is "minus nondo"
     ✓ the low digits of MAX_SAFE_INTEGER are "dec-gro two-doh seven"
 
-33 passing (42ms)
+
+39 passing (41ms)
 ~~~
 
 ---

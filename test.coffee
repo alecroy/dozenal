@@ -13,6 +13,7 @@ describe 'dozenal exports 2 functions', ->
     it 'print 12 is "10"', -> expect(print 12).to.equal '10'
     it 'print -12 is "-10"', -> expect(print -12).to.equal '-10'
     it 'print 24.0625 is "20.09"', -> expect(print 24.0625).to.equal '20.09'
+    it 'print 250561 is "101001"', -> expect(print 250561).to.equal '101001'
   describe '.print(number, "d") returns a lowercase equivalent', ->
     it 'print 10, \'d\' is "t"', -> expect(print 10, 'd').to.equal 't'
     it 'print 11, \'e\' is "e"', -> expect(print 11, 'd').to.equal 'e'
@@ -23,6 +24,10 @@ describe 'dozenal exports 2 functions', ->
   describe '.print(number, "1.5") prints 1 digit and 5 dozenal places', ->
     it 'print pi, \'1.5\' is "3.18480"', ->
       expect(print Math.PI, '1.5').to.equal "3.18480"
+    it 'print 1.5, \'1.5\' is "1.6    "', ->
+      expect(print 1.5, '1.5').to.equal "1.6    "
+    it 'print 0.25, \'0.\' is ".3"', ->
+      expect(print 0.25, '0.').to.equal ".3"
   describe '.say(number) returns a string of pronouncable words', ->
     it '0 is "zero"', -> expect(say 0).to.equal "zero"
     it '10 is "dec"', -> expect(say 10).to.equal "dec"
@@ -31,9 +36,14 @@ describe 'dozenal exports 2 functions', ->
     it '12 is "doh"', -> expect(say 12).to.equal "doh"
     it '144 is "gro"', -> expect(say 144).to.equal "gro"
     it '157 is "gro doh one"', -> expect(say 157).to.equal "gro doh one"
+    it '250,561 is "gro one mo one"', ->
+      expect(say 250561).to.equal "gro one mo one"
   describe '.say(..) can pronounce fractions', ->
     it 'pi to 4 dozenal places is "three point one eight four eight"', ->
       expect(say Math.PI, '.4').to.equal 'three point one eight four eight'
+    it '0.25 is "zero point three"', -> expect(say 0.25).to.equal 'zero point three'
+    it '0.25, \'0.\' is "point three"', ->
+      expect(say 0.25, '0.').to.equal 'point three'
   describe '.say(..) works up to nondo (12^27)', ->
     it '12^0 is "one"', -> expect(say 12**0).to.equal "one"
     it '12^1 is "doh"', -> expect(say 12**1).to.equal "doh"

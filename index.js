@@ -28,7 +28,8 @@
   integerToDigits = function(integer, numerals, fixed, width) {
     var lsb, output;
     output = [];
-    if (integer === 0) {
+    if (integer === 0 && (!fixed || width > 0)) {
+      width--;
       output.unshift('0');
     }
     while (integer >= 1 && (!fixed || width > 0)) {
@@ -79,14 +80,24 @@
     return "" + minus + (output.join(' '));
   };
 
+  sayFractions = function(fractions, output) {
+    if (output == null) {
+      output = [];
+    }
+    if ((fractions != null ? fractions.length : void 0) > 0) {
+      output.push('point');
+      while (fractions.length > 0) {
+        output.push(words[fractions.shift()]);
+      }
+    }
+    return output;
+  };
+
   sayDigits = function(digits, output) {
     if (output == null) {
       output = [];
     }
     switch (digits.length) {
-      case 0:
-        output.push('zero');
-        return output;
       case 1:
         if (digits[0] === '0') {
           output.push('zero');
@@ -99,19 +110,6 @@
           return str !== '';
         }).reverse();
     }
-  };
-
-  sayFractions = function(fractions, output) {
-    if (output == null) {
-      output = [];
-    }
-    if ((fractions != null ? fractions.length : void 0) > 0) {
-      output.push('point');
-      while (fractions.length > 0) {
-        output.push(words[fractions.shift()]);
-      }
-    }
-    return output;
   };
 
   sayDigitsReversed = function(digits, power, output) {
@@ -139,7 +137,7 @@
         case '0':
           return '';
         default:
-          if (group[0] === '1' && power > 0) {
+          if (group[0] === '1' && power > 0 && !group[1] && !group[2]) {
             return '';
           } else {
             return words[group[0]];
