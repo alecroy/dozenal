@@ -1,7 +1,7 @@
 chai = require 'chai'
 expect = chai.expect
 
-dozenal = require '..'
+dozenal = require './'
 print = dozenal.print
 say = dozenal.say
 

@@ -56,58 +56,6 @@
     }
   };
 
-  numerals = {
-    'D': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E'],
-    'd': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'e']
-  };
-
-  words = {
-    '1': 'one',
-    '2': 'two',
-    '3': 'three',
-    '4': 'four',
-    '5': 'five',
-    '6': 'six',
-    '7': 'seven',
-    '8': 'eight',
-    '9': 'nine',
-    'T': 'dec',
-    't': 'dec',
-    'E': 'el',
-    'e': 'el'
-  };
-
-  powers = {
-    0: '',
-    1: 'doh',
-    2: 'gro',
-    3: 'mo',
-    4: 'doh',
-    5: 'gro',
-    6: 'bo',
-    7: 'doh',
-    8: 'gro',
-    9: 'tro',
-    10: 'doh',
-    11: 'gro',
-    12: 'quadro',
-    13: 'doh',
-    14: 'gro',
-    15: 'quindo',
-    16: 'doh',
-    17: 'gro',
-    18: 'sexdo',
-    19: 'doh',
-    20: 'gro',
-    21: 'sepdo',
-    22: 'doh',
-    23: 'gro',
-    24: 'ocdo',
-    25: 'doh',
-    26: 'gro',
-    27: 'nondo'
-  };
-
   exports.say = function(number, format) {
     var digits, dozenal, fractions, output, ref;
     if (format == null) {
@@ -214,6 +162,58 @@
       }
     })());
     return sayDigitsReversed(digits, power + 3, output);
+  };
+
+  numerals = {
+    'D': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E'],
+    'd': ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 't', 'e']
+  };
+
+  words = {
+    '1': 'one',
+    '2': 'two',
+    '3': 'three',
+    '4': 'four',
+    '5': 'five',
+    '6': 'six',
+    '7': 'seven',
+    '8': 'eight',
+    '9': 'nine',
+    'T': 'dec',
+    't': 'dec',
+    'E': 'el',
+    'e': 'el'
+  };
+
+  powers = {
+    0: '',
+    1: 'doh',
+    2: 'gro',
+    3: 'mo',
+    4: 'doh',
+    5: 'gro',
+    6: 'bo',
+    7: 'doh',
+    8: 'gro',
+    9: 'tro',
+    10: 'doh',
+    11: 'gro',
+    12: 'quadro',
+    13: 'doh',
+    14: 'gro',
+    15: 'quindo',
+    16: 'doh',
+    17: 'gro',
+    18: 'sexdo',
+    19: 'doh',
+    20: 'gro',
+    21: 'sepdo',
+    22: 'doh',
+    23: 'gro',
+    24: 'ocdo',
+    25: 'doh',
+    26: 'gro',
+    27: 'nondo'
   };
 
 }).call(this);

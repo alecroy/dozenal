@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "coffee -pc README.litcoffee >index.js",
-    "test": "mocha --compilers coffee:coffee-script/register"
+    "test": "mocha --compilers coffee:coffee-script/register test.coffee"
   },
   "keywords": [
     "dozenal",
