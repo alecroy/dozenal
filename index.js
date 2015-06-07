@@ -3,7 +3,7 @@
   var digitsTable;
 
   exports.print = function(number, format) {
-    var digits, fWidth, fractional, fractions, iWidth, integral, lsb, msb, ref, sign, table, upperLower;
+    var digits, fFixed, fWidth, fractional, fractions, iFixed, iWidth, integral, lsb, msb, ref, ref1, sign, table, upperLower;
     if (format == null) {
       format = '';
     }
@@ -14,26 +14,40 @@
     integral = Math.floor(number);
     fractional = number - integral;
     ref = /(\d?)([dD]?).?(\d?)/.exec(format), format = ref[0], iWidth = ref[1], upperLower = ref[2], fWidth = ref[3];
-    iWidth = Number(iWidth) || Number.MAX_SAFE_INTEGER;
-    fWidth = Number(fWidth) || Number.MAX_SAFE_INTEGER;
-    upperLower || (upperLower = 'd');
-    table = digitsTable[upperLower];
+    ref1 = [false, false], iFixed = ref1[0], fFixed = ref1[1];
+    if (iWidth !== '') {
+      iWidth = Number(iWidth);
+      iFixed = true;
+    }
+    if (fWidth !== '') {
+      fWidth = Number(fWidth);
+      fFixed = true;
+    }
+    table = digitsTable[upperLower || 'd'];
     if (integral === 0) {
       digits.unshift('0');
     }
-    while (integral >= 1 && iWidth > 0) {
+    while (integral >= 1 && (!iFixed || iWidth > 0)) {
       iWidth--;
       lsb = integral % 12;
       digits.unshift(table[lsb]);
       integral -= lsb;
       integral /= 12;
     }
-    while (fractional > 0 && fWidth > 0) {
+    while (iFixed && iWidth > 0) {
+      digits.unshift(' ');
+      iWidth--;
+    }
+    while (fractional > 0 && (!fFixed || fWidth > 0)) {
       fWidth--;
       fractional *= 12;
       msb = Math.floor(fractional);
       fractions.push(table[msb]);
       fractional -= msb;
+    }
+    while (fFixed && fWidth > 0) {
+      fractions.push(' ');
+      fWidth--;
     }
     if (fractions.length === 0) {
       return "" + sign + (digits.join(''));
