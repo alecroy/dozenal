@@ -4,7 +4,15 @@ This is a module to `print` numbers in Base 12.  An optional format string can b
 
 To be extra silly, you can also `say` the numbers, which pronounces them with words.  I went ahead and made up the names for very large powers, so be aware "bo" does not line up with "a billion" and so forth.  Test output is included at the bottom.
 
-| Input | Output | Pronunciation |
+#### Example Usage
+
+~~~coffeescript
+dozenal = require 'dozenal'
+dozenal.print 300
+dozenal.say 300
+~~~
+
+| Input | Printed | Said |
 |-------|--------|---------------|
 |`7`|`'7'`| 'seven' |
 |`-7`|`'-7'`| 'minus seven' |
@@ -17,6 +25,12 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
 |`144`|`'100'`| 'gro' |
 |`25.5`|`'21.6'`| 'two-doh one point six' |
 |`3.14159265, '.3'`|`'3.184'`| 'three point one eight four' |
+
+## The Module
+
+This module exports two functions: `.print(..)` and `.say(..)`.
+
+#### Print it
 
     exports.print = (number, format='') ->
       sign = if -1 is Math.sign number then '-' else ''
@@ -63,6 +77,8 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
         output.push ' '
         width--
       output
+
+#### Say it
 
     exports.say = (number, format='') ->
       output = []
@@ -127,6 +143,8 @@ To be extra silly, you can also `say` the numbers, which pronounces them with wo
         else "#{words[group[2]]}-#{powers[power + 2]}"
 
       sayDigitsReversed digits, power + 3, output
+
+#### Constants: strings to express numerals and powers
 
     numerals =
       'D': [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'E', ],
