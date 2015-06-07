@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "description": "A module for converting base-10 number strings to base-12.",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "devDependencies": {
     "chai": "^3.0.0"
   },
