@@ -23,27 +23,27 @@ describe 'dozenal exports 2 functions', ->
     it 'print pi, \'1.5\' is "3.18480"', ->
       expect(print Math.PI, '1.5').to.equal "3.18480"
   describe '.say(number) returns a string of pronouncable words', ->
-    it 'say 0 is "zero"', -> expect(say 0).to.equal "zero"
-    it 'say 10 is "dec"', -> expect(say 10).to.equal "dec"
-    it 'say 11 is "el"', -> expect(say 11).to.equal "el"
-    it 'say 12 is "doh"', -> expect(say 12).to.equal "doh"
-    it 'say 144 is "gro"', -> expect(say 144).to.equal "gro"
-    it 'say 157 is "gro doh one"', -> expect(say 157).to.equal "gro doh one"
+    it '0 is "zero"', -> expect(say 0).to.equal "zero"
+    it '10 is "dec"', -> expect(say 10).to.equal "dec"
+    it '11 is "el"', -> expect(say 11).to.equal "el"
+    it '12 is "doh"', -> expect(say 12).to.equal "doh"
+    it '144 is "gro"', -> expect(say 144).to.equal "gro"
+    it '157 is "gro doh one"', -> expect(say 157).to.equal "gro doh one"
   describe '.say(..) can pronounce fractions', ->
-    it 'say pi to 4 dozenal places is "three point one eight four eight"', ->
+    it 'pi to 4 dozenal places is "three point one eight four eight"', ->
       expect(say Math.PI, '.4').to.equal 'three point one eight four eight'
-  describe '.say(..) works up to octo (12^27)', ->
-    it 'say 12^0 is "one"', -> expect(say 12**0).to.equal "one"
-    it 'say 12^1 is "doh"', -> expect(say 12**1).to.equal "doh"
-    it 'say 12^2 is "gro"', -> expect(say 12**2).to.equal "gro"
-    it 'say 12^3 is "mo"', -> expect(say 12**3).to.equal "mo"
-    it 'say 12^6 is "millo"', -> expect(say 12**6).to.equal "millo"
-    it 'say 12^9 is "bo"', -> expect(say 12**9).to.equal "bo"
-    it 'say 12^12 is "tro"', -> expect(say 12**12).to.equal "tro"
-    it 'say 12^15 is "quadro"', -> expect(say 12**15).to.equal "quadro"
-    it 'say 12^18 is "quinto"', -> expect(say 12**18).to.equal "quinto"
-    it 'say 12^21 is "sexto"', -> expect(say 12**21).to.equal "sexto"
-    it 'say 12^24 is "septo"', -> expect(say 12**24).to.equal "septo"
-    it 'say 12^27 is "octo"', -> expect(say 12**27).to.equal "octo"
+  describe '.say(..) works up to nondo (12^27)', ->
+    it '12^0 is "one"', -> expect(say 12**0).to.equal "one"
+    it '12^1 is "doh"', -> expect(say 12**1).to.equal "doh"
+    it '12^2 is "gro"', -> expect(say 12**2).to.equal "gro"
+    it '12^3 is "mo"', -> expect(say 12**3).to.equal "mo"
+    it '12^6 is "bo"', -> expect(say 12**6).to.equal "bo"
+    it '12^9 is "tro"', -> expect(say 12**9).to.equal "tro"
+    it '12^12 is "quadro"', -> expect(say 12**12).to.equal "quadro"
+    it '12^15 is "quinto"', -> expect(say 12**15).to.equal "quindo"
+    it '12^18 is "sexto"', -> expect(say 12**18).to.equal "sexdo"
+    it '12^21 is "septo"', -> expect(say 12**21).to.equal "sepdo"
+    it '12^24 is "octo"', -> expect(say 12**24).to.equal "ocdo"
+    it '12^27 is "nondo"', -> expect(say 12**27).to.equal "nondo"
     it 'the low digits of MAX_SAFE_INTEGER are "dec-gro two-doh seven"', ->
       expect(say Number.MAX_SAFE_INTEGER, '3').to.equal 'dec-gro two-doh seven'
