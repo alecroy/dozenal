@@ -8,20 +8,21 @@
       integral = Math.floor number
       fractional = number - integral
 
-      [before, after] = format.split '.'
-      after ||= ''
-      nLeading = if before is '' then Number.MAX_SAFE_INTEGER else Number before
-      nTrailing = if after is '' then Number.MAX_SAFE_INTEGER else Number after
+      [format, iWidth, upperLower, fWidth] = /(\d?)([dD]?).?(\d?)/.exec format
+      iWidth = Number(iWidth) || Number.MAX_SAFE_INTEGER
+      fWidth = Number(fWidth) || Number.MAX_SAFE_INTEGER
+      upperLower ||= 'd'
+      table = digitsTable[upperLower]
 
-      while integral > 1 and nLeading > 0
-        nLeading--
+      while integral > 1 and iWidth > 0
+        iWidth--
         lsb = integral % 12
-        digits.unshift lsb
+        digits.unshift table[lsb]
         integral -= lsb
         integral /= 12
 
-      while fractional > 0 and nTrailing > 0
-        nTrailing--
+      while fractional > 0 and fWidth > 0
+        fWidth--
         fractional *= 12
         msb = Math.floor fractional
         fractions.push table[msb]
@@ -32,17 +33,34 @@
       else
         "#{sign}#{digits.join ''}.#{fractions.join ''}"
 
-    table = [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      'T',
-      'E',
-    ]
+    digitsTable =
+      'D': [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        'T',
+        'E',
+      ],
+      'd': [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        't',
+        'e',
+      ],
+
+
